@@ -22,11 +22,11 @@
 
 % 1. Set the url of the matlab documentation to a variable called helpURL
 
-helpURL = https://www.mathworks.com/help/matlab/;
+helpURL = ('https://www.mathworks.com/help/matlab/')
 
 % 2. What does the command 'clear all' do?
 %
-% Answer: 
+% Answer: Clears all workspace, variables, work
 %
 
 
@@ -34,16 +34,17 @@ helpURL = https://www.mathworks.com/help/matlab/;
 % numbers [1 7 21 32 67 32453]? Store your answer in a variable called
 % averageAnswer.
 
-
+numbersMatrix = [1 7 21 32 67 32453];
+averageAnswer = mean(numbersMatrix);
 
 % 4. What command would you type to see a list of all installed toolboxes?
 
-
+ver
 
 % 5. What command would return a list of all of the available functions in 
 % the image processing toolbox? 
 
-
+helpwin images
 
 % 6. On the line below figure, write a command to draw a graph of 
 % x and y. 
@@ -52,6 +53,7 @@ x = linspace(-2*pi,2*pi);
 y = sin(x);
 
 figure
+plot(x,y)
         %<- command goes here
 
         
@@ -60,22 +62,24 @@ figure
 % in a journal article (there are many possible answers to this). 
 
 %
-% Answer: 
-%
+% Answer: anovaX = anova(x)
+% This will complete an ANOVA test to show significant differences between
+% groups from repeated measures variable x
 
 % 8. What are the 2 major types of loops that MATLAB supports? What is the
 % difference between them?
 
 %
-% Answer: 
-% 
+% Answer: for loops repeat for a set number of iterations 
+%         while loops repeat until a set condition is met
 
 
 % 9. What does NaN stand for? Give an example of when you would get NaN as
 % an answer. 
 
 %
-% Answer: 
+% Answer: NaN means Not a Number, which would be an error if your algorith
+% attempts to divide by zero
 %
 
 
@@ -85,21 +89,21 @@ figure
 % any of the values in A.
 
 A = [1 2 3 2 1 NaN 1 2 3 NaN];
-S = sum(A)
+S = nansum(A)
 
 
 % 11. I used to love playing the game minesweeper. Is there a way that I
 % could play a similar game on Matlab? Write the command that would launch
 % the game if so. 
 
-
+xpbombs
 
 % 12. What happens if you type why and hit enter in the command window?
 % Repeat this a few times and copy your result below (Make sure everything
 % is commented out).
 
 %
-% Answer: 
+% Answer: It should be obvious.
 %
 
 
@@ -115,7 +119,11 @@ S = sum(A)
 %%% Enter the code for your program below this line
 
 
-
+disp('Hello World')
+prompt = 'What is your name?'
+str = input(prompt,'s')
+disp('Hello, ')
+disp(str)
 
 
 %%%%% When you have completed everything, type the following two commands
