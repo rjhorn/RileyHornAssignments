@@ -2,11 +2,6 @@
 % Riley Horn
 % Assignment 2: Matlab Basics
 % Due: September 13, 2019
-%
-%
-% Questions: 
-%
-% -number 18, unit vector equation
 % 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
