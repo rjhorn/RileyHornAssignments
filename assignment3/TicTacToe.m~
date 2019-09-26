@@ -1,9 +1,15 @@
+%KINE 6203 Data Analysis using MATLAB
+%Assignment 3: Tic Tac Toe - Part 1
+%Play tic tac toe against the computer!
+%(No loops allowed in part 1)
+
 clc;
 clear;
 
 %Initialize Variables
 firstMove = 0;
 playerMove = 0;
+computerSkill = 2; %1 = random, 2 = impossible, potential implementation 
 gameBoard = ['1' '2' '3' '4' '5' '6' '7' '8' '9'];
 displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
@@ -15,10 +21,10 @@ yourTurnMessage = ('Your turn. Where do you want to go?\n');
 
 %Title screen, game selection
 fprintf('*****Tic-Tac-Toe*****\n');
-fprintf('Select game type: \n'); 
-fprintf('1: Single Player\n');
-fprintf('2: Two Player\n');
-fprintf('3: Quit\n');
+% fprintf('Select game type: \n'); 
+% fprintf('1: Single Player\n');
+% fprintf('2: Two Player\n');
+% fprintf('3: Quit\n');
 fprintf('\n');
 
 %Show the game board with numbers for reference
@@ -51,19 +57,38 @@ fprintf(' \n');
 %Clear the numbers from the game board 
 gameBoard = [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '];
 
-% %Determine who goes first
-% fprintf('Would you like to go first?\n');
-% fprintf('1: Yes\n');
-% fprintf('2: No\n');
+%Determine who goes first
+fprintf('Would you like to go first?\n');
+fprintf('1: Yes\n');
+fprintf('2: No\n');
+firstMove = input('');
 
-% firstMove = input('');
-% if (firstMove == 1) 
-%     %Human goes first
-%     disp('(test: human goes first)');
-% elseif (firstMove == 2)
-%     %Computer goes first
-%     disp('(test: computer goes first)');
-% end
+if (firstMove ~= 1 && firstMove ~= 2)
+    disp('Please enter 1 or 2');
+    fprintf('Who will go first?\n');
+    fprintf('1: Human\n');
+    fprintf('2: Computer\n');
+    firstMove = input('');
+    if (firstMove ~= 1 && firstMove ~= 2)
+        disp('Game Over');
+        return;
+    end
+end
+    
+%***********Computer Turn 0 (if computer goes first)**********    
+if (firstMove == 2) 
+    %Impossible Computer Move
+    gameBoard(7) = 'O';
+    
+    displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+        gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
+        newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
+        ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
+        '   ----|-----|-----', newline, '     ', gameBoard(7), ' |  ',...
+        gameBoard(8), '  | ', gameBoard(9), ' ', newline];
+    disp(displayGameBoard);
+    %***************End of Computer's Turn 0******************
+end
     
 
 
@@ -115,24 +140,22 @@ disp(displayGameBoard);
 
 %**********Computer's Turn 1***********
 %Generate Computer move, first try is just moving in the first open slot
-if gameBoard(1) == ' '
-    gameBoard(1) = 'O';
-elseif gameBoard(2) == ' '
-    gameBoard(2) = 'O';
-elseif gameBoard(3) == ' '
-    gameBoard(3) = 'O';
-elseif gameBoard(4) == ' '
-    gameBoard(4) = 'O';
-elseif gameBoard(5) == ' '
-    gameBoard(5) = 'O';
-elseif gameBoard(6) == ' '
-    gameBoard(6) = 'O';
-elseif gameBoard(7) == ' '
-    gameBoard(7) = 'O';
-elseif gameBoard(8) == ' '
-    gameBoard(8) = 'O';
-elseif gameBoard(9) == ' '
-    gameBoard(9) = 'O';
+
+%Impossible Strategy
+if (firstMove == 1) %This means the human went first and this is the computers first move
+    if (gameBoard(5) == ' ')
+        gameBoard(5) = 'O'; %The cpu will take the middle square if it goes second
+    elseif (gameBoard(5) == 'X')
+        gameBoard(7) = '0'; %If the middle square was taken first, cpu will take the corner
+    end
+elseif (firstMove == 2) %this is the computers second move
+   if (gameBoard(1) == 'X')
+        gameBoard(3) = 'O';
+   elseif (gameBoard(4) == 'X')
+        gameBoard(9) = 'O';
+   else
+        gameBoard(1) = 'O';
+   end
 end
 
 displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
@@ -191,25 +214,132 @@ disp(displayGameBoard);
 %**********End of Player Turn 2***********
 
 %**********Computer's Turn 2***********
-%Generate Computer move, first try is just moving in the first open slot
-if gameBoard(1) == ' '
-    gameBoard(1) = 'O';
-elseif gameBoard(2) == ' '
-    gameBoard(2) = 'O';
-elseif gameBoard(3) == ' '
+%Impossible Computer Strategy
+%Winning Moves
+if (gameBoard(1) == 'O') && (gameBoard(2) == 'O') && gameBoard(3) == ' ')
     gameBoard(3) = 'O';
-elseif gameBoard(4) == ' '
-    gameBoard(4) = 'O';
-elseif gameBoard(5) == ' '
-    gameBoard(5) = 'O';
-elseif gameBoard(6) == ' '
+elseif (gameBoard(1) == 'O') && (gameBoard(3) == 'O') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(3) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(4) == 'O') && (gameBoard(5) == 'O') && gameBoard(6) == ' ')
     gameBoard(6) = 'O';
-elseif gameBoard(7) == ' '
-    gameBoard(7) = 'O';
-elseif gameBoard(8) == ' '
-    gameBoard(8) = 'O';
-elseif gameBoard(9) == ' '
+elseif (gameBoard(4) == 'O') && (gameBoard(6) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(6) == 'O') && (gameBoard(5) == 'O') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(7) == 'O') && (gameBoard(8) == 'O') && gameBoard(9) == ' ')
     gameBoard(9) = 'O';
+elseif (gameBoard(7) == 'O') && (gameBoard(9) == 'O') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(8) == 'O') && (gameBoard(9) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(4) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(7) == 'O') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(4) == 'O') && (gameBoard(7) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(5) == '5') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(8) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(8) == 'O') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(6) == 'O') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(9) == 'O') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(6) == 'O') && (gameBoard(9) == 'O') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(5) == 'O') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(9) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(9) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(5) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(7) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(7) == 'O') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+%Defensive Moves
+elseif (gameBoard(1) == 'X') && (gameBoard(2) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(3) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(3) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(5) == 'X') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(6) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(6) == 'X') && (gameBoard(5) == 'X') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(7) == 'X') && (gameBoard(8) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(7) == 'X') && (gameBoard(9) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(8) == 'X') && (gameBoard(9) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(4) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(7) == 'X') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(7) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(5) == '5') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(8) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(8) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(6) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(9) == 'X') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(6) == 'X') && (gameBoard(9) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(5) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(9) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(5) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(7) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+%Other moves
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
 end
 
 displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
@@ -221,6 +351,74 @@ displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
 disp(displayGameBoard);
 %***************End of Computer's Turn 2******************
 
+%***********Check for Win**************
+% Possible Wins: 123, 456, 789, 147, 258, 369, 159, 357
+if (gameBoard(1) == gameBoard(2)) && (gameBoard(1) == gameBoard(3))
+    if gameBoard(1) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(1) == 'O'
+        disp('You lost.');
+        return;
+    end
+elseif (gameBoard(4) == gameBoard(5)) && (gameBoard(4) == gameBoard(6))
+     if gameBoard(4) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(4) == 'O'
+        disp('You lost.');
+        return;
+    end
+elseif (gameBoard(7) == gameBoard(8)) && (gameBoard(7) == gameBoard(9))
+     if gameBoard(7) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(7) == 'O'
+        disp('You lost.');
+        return;
+    end
+elseif (gameBoard(1) == gameBoard(4)) && (gameBoard(1) == gameBoard(7))
+     if gameBoard(1) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(1) == 'O'
+        disp('You lost.');
+        return;
+    end  
+elseif (gameBoard(2) == gameBoard(5)) && (gameBoard(2) == gameBoard(8))
+     if gameBoard(2) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(2) == 'O'
+        disp('You lost.');
+        return;
+    end
+elseif (gameBoard(3) == gameBoard(6)) && (gameBoard(3) == gameBoard(9))
+     if gameBoard(3) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(3) == 'O'
+        disp('You lost.');
+        return;
+    end
+elseif (gameBoard(1) == gameBoard(5)) && (gameBoard(1) == gameBoard(9))
+     if gameBoard(1) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(1) == 'O'
+        disp('You lost.');
+        return;
+    end
+elseif (gameBoard(3) == gameBoard(5)) && (gameBoard(3) == gameBoard(7))
+     if gameBoard(3) == 'X'
+        disp('You Win!');
+        return;
+    elseif gameBoard(3) == 'O'
+        disp('You lost.');
+        return;
+    end
+end
+%***************End of Check for Win*************
 
 %**********Player Turn 3**********
 %Prompt user for move and take input
@@ -338,24 +536,132 @@ end
 
 %**********Computer's Turn 3***********
 %Generate Computer move, first try is just moving in the first open slot
-if gameBoard(1) == ' '
-    gameBoard(1) = 'O';
-elseif gameBoard(2) == ' '
-    gameBoard(2) = 'O';
-elseif gameBoard(3) == ' '
+%Impossible Computer Strategy
+%Winning Moves
+if (gameBoard(1) == 'O') && (gameBoard(2) == 'O') && gameBoard(3) == ' ')
     gameBoard(3) = 'O';
-elseif gameBoard(4) == ' '
-    gameBoard(4) = 'O';
-elseif gameBoard(5) == ' '
-    gameBoard(5) = 'O';
-elseif gameBoard(6) == ' '
+elseif (gameBoard(1) == 'O') && (gameBoard(3) == 'O') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(3) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(4) == 'O') && (gameBoard(5) == 'O') && gameBoard(6) == ' ')
     gameBoard(6) = 'O';
-elseif gameBoard(7) == ' '
-    gameBoard(7) = 'O';
-elseif gameBoard(8) == ' '
-    gameBoard(8) = 'O';
-elseif gameBoard(9) == ' '
+elseif (gameBoard(4) == 'O') && (gameBoard(6) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(6) == 'O') && (gameBoard(5) == 'O') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(7) == 'O') && (gameBoard(8) == 'O') && gameBoard(9) == ' ')
     gameBoard(9) = 'O';
+elseif (gameBoard(7) == 'O') && (gameBoard(9) == 'O') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(8) == 'O') && (gameBoard(9) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(4) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(7) == 'O') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(4) == 'O') && (gameBoard(7) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(5) == '5') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(8) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(8) == 'O') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(6) == 'O') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(9) == 'O') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(6) == 'O') && (gameBoard(9) == 'O') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(5) == 'O') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(9) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(9) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(5) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(7) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(7) == 'O') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+%Defensive Moves
+elseif (gameBoard(1) == 'X') && (gameBoard(2) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(3) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(3) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(5) == 'X') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(6) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(6) == 'X') && (gameBoard(5) == 'X') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(7) == 'X') && (gameBoard(8) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(7) == 'X') && (gameBoard(9) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(8) == 'X') && (gameBoard(9) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(4) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(7) == 'X') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(7) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(5) == '5') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(8) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(8) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(6) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(9) == 'X') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(6) == 'X') && (gameBoard(9) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(5) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(9) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(5) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(7) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+%Other moves
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
 end
 
 displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
@@ -552,25 +858,132 @@ end
 %***************End of Check for Win*************
 
 %**********Computer's Turn 4***********
-%Generate Computer move, first try is just moving in the first open slot
-if gameBoard(1) == ' '
-    gameBoard(1) = 'O';
-elseif gameBoard(2) == ' '
-    gameBoard(2) = 'O';
-elseif gameBoard(3) == ' '
+%Impossible Computer Strategy
+%Winning Moves
+if (gameBoard(1) == 'O') && (gameBoard(2) == 'O') && gameBoard(3) == ' ')
     gameBoard(3) = 'O';
-elseif gameBoard(4) == ' '
-    gameBoard(4) = 'O';
-elseif gameBoard(5) == ' '
-    gameBoard(5) = 'O';
-elseif gameBoard(6) == ' '
+elseif (gameBoard(1) == 'O') && (gameBoard(3) == 'O') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(3) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(4) == 'O') && (gameBoard(5) == 'O') && gameBoard(6) == ' ')
     gameBoard(6) = 'O';
-elseif gameBoard(7) == ' '
-    gameBoard(7) = 'O';
-elseif gameBoard(8) == ' '
-    gameBoard(8) = 'O';
-elseif gameBoard(9) == ' '
+elseif (gameBoard(4) == 'O') && (gameBoard(6) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(6) == 'O') && (gameBoard(5) == 'O') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(7) == 'O') && (gameBoard(8) == 'O') && gameBoard(9) == ' ')
     gameBoard(9) = 'O';
+elseif (gameBoard(7) == 'O') && (gameBoard(9) == 'O') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(8) == 'O') && (gameBoard(9) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(4) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(7) == 'O') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(4) == 'O') && (gameBoard(7) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(5) == '5') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(2) == 'O') && (gameBoard(8) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(8) == 'O') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(6) == 'O') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(9) == 'O') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(6) == 'O') && (gameBoard(9) == 'O') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(5) == 'O') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(1) == 'O') && (gameBoard(9) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(9) == 'O') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(5) == 'O') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(3) == 'O') && (gameBoard(7) == 'O') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'O') && (gameBoard(7) == 'O') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+%Defensive Moves
+elseif (gameBoard(1) == 'X') && (gameBoard(2) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(3) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(3) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(5) == 'X') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(6) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(6) == 'X') && (gameBoard(5) == 'X') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(7) == 'X') && (gameBoard(8) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(7) == 'X') && (gameBoard(9) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(8) == 'X') && (gameBoard(9) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(4) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(7) == 'X') && gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(4) == 'X') && (gameBoard(7) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(5) == '5') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(2) == 'X') && (gameBoard(8) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(8) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(6) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(9) == 'X') && gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(6) == 'X') && (gameBoard(9) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(5) == 'X') && gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(9) == 'X') && gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(5) == 'X') && gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(5) == 'X') && (gameBoard(7) == 'X') && gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+%Other moves
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(1) == 'X') && (gameBoard(9) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(3) == 'X') && (gameBoard(7) == 'X') && gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
+elseif (gameBoard(5) == ' ')
+    gameBoard(5) = 'O';
+elseif (gameBoard(1) == ' ')
+    gameBoard(1) = 'O';
+elseif (gameBoard(3) == ' ')
+    gameBoard(3) = 'O';
+elseif (gameBoard(7) == ' ')
+    gameBoard(7) = 'O';
+elseif (gameBoard(9) == ' ')
+    gameBoard(9) = 'O';
+elseif (gameBoard(2) == ' ')
+    gameBoard(2) = 'O';
+elseif (gameBoard(4) == ' ')
+    gameBoard(4) = 'O';
+elseif (gameBoard(6) == ' ')
+    gameBoard(6) = 'O';
+elseif (gameBoard(8) == ' ')
+    gameBoard(8) = 'O';
 end
 
 displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
@@ -652,119 +1065,122 @@ end
 %***************End of Check for Win*************
 
 
-%**********Player Turn 5**********
-%Prompt user for move and take input
-playerMove = input(yourTurnMessage);
-playerMove = floor(playerMove);
-
-%Check that the player's move is a number 1-9
-if (playerMove < 1) || (playerMove > 9)
-    disp('Invalid Number: Pick a number between 1 and 9 or the game will end.');
+%**********Player Turn 5 (won't happen if computer went first)**********
+if (firstMove == 1) 
+    %Prompt user for move and take input
     playerMove = input(yourTurnMessage);
     playerMove = floor(playerMove);
+
+    %Check that the player's move is a number 1-9
+    if (playerMove < 1) || (playerMove > 9)
+        disp('Invalid Number: Pick a number between 1 and 9 or the game will end.');
+        playerMove = input(yourTurnMessage);
+        playerMove = floor(playerMove);
+    end
+
+    %Check that player's move box is empty
+    if (gameBoard(playerMove) == 'X') || (gameBoard(playerMove) == 'O')
+        disp('Invalid Square: That square is taken, pick an open square or the game will end.');
+        playerMove = input(yourTurnMessage);
+        playerMove = floor(playerMove);
+    end
+
+    %Check that player's move is a number 1-9, second time
+    if (playerMove < 1) || (playerMove > 9)
+        disp('Invalid Number: Game Over');
+        return;
+    end
+
+    %Check that player's move box is empty, second time
+    if (gameBoard(playerMove) == 'X') || (gameBoard(playerMove) == 'O')
+        disp('Invalid Square: Game Over');
+        return;
+    end
+
+    %Place player's move on the board
+    gameBoard(playerMove) = 'X';
+
+    %Display updated game board
+    displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+        gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
+        newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
+        ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
+        '   ----|-----|-----', newline, '     ', gameBoard(7), ' |  ',...
+        gameBoard(8), '  | ', gameBoard(9), ' ', newline];
+    disp(displayGameBoard);
+    %**********End of Player Turn 5***********
+
+
+    %***********Check for Win**************
+    % Possible Wins: 123, 456, 789, 147, 258, 369, 159, 357
+    if (gameBoard(1) == gameBoard(2)) && (gameBoard(1) == gameBoard(3))
+        if gameBoard(1) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(1) == 'O'
+            disp('You lost.');
+            return;
+        end
+    elseif (gameBoard(4) == gameBoard(5)) && (gameBoard(4) == gameBoard(6))
+         if gameBoard(4) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(4) == 'O'
+            disp('You lost.');
+            return;
+        end
+    elseif (gameBoard(7) == gameBoard(8)) && (gameBoard(7) == gameBoard(9))
+         if gameBoard(7) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(7) == 'O'
+            disp('You lost.');
+            return;
+        end
+    elseif (gameBoard(1) == gameBoard(4)) && (gameBoard(1) == gameBoard(7))
+         if gameBoard(1) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(1) == 'O'
+            disp('You lost.');
+            return;
+        end  
+    elseif (gameBoard(2) == gameBoard(5)) && (gameBoard(2) == gameBoard(8))
+         if gameBoard(2) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(2) == 'O'
+            disp('You lost.');
+            return;
+        end
+    elseif (gameBoard(3) == gameBoard(6)) && (gameBoard(3) == gameBoard(9))
+         if gameBoard(3) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(3) == 'O'
+            disp('You lost.');
+            return;
+        end
+    elseif (gameBoard(1) == gameBoard(5)) && (gameBoard(1) == gameBoard(9))
+         if gameBoard(1) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(1) == 'O'
+            disp('You lost.');
+            return;
+        end
+    elseif (gameBoard(3) == gameBoard(5)) && (gameBoard(3) == gameBoard(7))
+         if gameBoard(3) == 'X'
+            disp('You Win!');
+            return;
+        elseif gameBoard(3) == 'O'
+            disp('You lost.');
+            return;
+        end
+    end
+    %***************End of Check for Win*************
 end
-
-%Check that player's move box is empty
-if (gameBoard(playerMove) == 'X') || (gameBoard(playerMove) == 'O')
-    disp('Invalid Square: That square is taken, pick an open square or the game will end.');
-    playerMove = input(yourTurnMessage);
-    playerMove = floor(playerMove);
-end
-
-%Check that player's move is a number 1-9, second time
-if (playerMove < 1) || (playerMove > 9)
-    disp('Invalid Number: Game Over');
-    return;
-end
-
-%Check that player's move box is empty, second time
-if (gameBoard(playerMove) == 'X') || (gameBoard(playerMove) == 'O')
-    disp('Invalid Square: Game Over');
-    return;
-end
-
-%Place player's move on the board
-gameBoard(playerMove) = 'X';
-
-%Display updated game board
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
-    gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
-    newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
-    ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
-    '   ----|-----|-----', newline, '     ', gameBoard(7), ' |  ',...
-    gameBoard(8), '  | ', gameBoard(9), ' ', newline];
-disp(displayGameBoard);
-%**********End of Player Turn 5***********
-
-
-%***********Check for Win**************
-% Possible Wins: 123, 456, 789, 147, 258, 369, 159, 357
-if (gameBoard(1) == gameBoard(2)) && (gameBoard(1) == gameBoard(3))
-    if gameBoard(1) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(1) == 'O'
-        disp('You lost.');
-        return;
-    end
-elseif (gameBoard(4) == gameBoard(5)) && (gameBoard(4) == gameBoard(6))
-     if gameBoard(4) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(4) == 'O'
-        disp('You lost.');
-        return;
-    end
-elseif (gameBoard(7) == gameBoard(8)) && (gameBoard(7) == gameBoard(9))
-     if gameBoard(7) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(7) == 'O'
-        disp('You lost.');
-        return;
-    end
-elseif (gameBoard(1) == gameBoard(4)) && (gameBoard(1) == gameBoard(7))
-     if gameBoard(1) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(1) == 'O'
-        disp('You lost.');
-        return;
-    end  
-elseif (gameBoard(2) == gameBoard(5)) && (gameBoard(2) == gameBoard(8))
-     if gameBoard(2) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(2) == 'O'
-        disp('You lost.');
-        return;
-    end
-elseif (gameBoard(3) == gameBoard(6)) && (gameBoard(3) == gameBoard(9))
-     if gameBoard(3) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(3) == 'O'
-        disp('You lost.');
-        return;
-    end
-elseif (gameBoard(1) == gameBoard(5)) && (gameBoard(1) == gameBoard(9))
-     if gameBoard(1) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(1) == 'O'
-        disp('You lost.');
-        return;
-    end
-elseif (gameBoard(3) == gameBoard(5)) && (gameBoard(3) == gameBoard(7))
-     if gameBoard(3) == 'X'
-        disp('You Win!');
-        return;
-    elseif gameBoard(3) == 'O'
-        disp('You lost.');
-        return;
-    end
-end
-%***************End of Check for Win*************
+%end of optional player turn 5
 
 % Cat Wins
 % If the game gets this far and there is no winner, it must be a cat game
