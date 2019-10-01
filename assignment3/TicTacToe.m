@@ -9,6 +9,7 @@ clear;
 %Initialize Variables
 firstMove = 0;
 playerMove = 0;
+playGame = 0;
 computerSkill = 2; %1 = random, 2 = impossible, potential implementation 
 gameBoard = ['1' '2' '3' '4' '5' '6' '7' '8' '9'];
 displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
@@ -20,12 +21,19 @@ displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
 yourTurnMessage = ('Your turn. Where do you want to go?\n');
 
 %Title screen, game selection
-fprintf('*****Tic-Tac-Toe*****\n');
-% fprintf('Select game type: \n'); 
-% fprintf('1: Single Player\n');
-% fprintf('2: Two Player\n');
-% fprintf('3: Quit\n');
-fprintf('\n');
+fprintf('*****Tic-Tac-Toe*****\n\n');
+
+%Ask if user would like to play, if not, end the program
+fprintf('Would you like to play a game of Tic-Tac-Toe?\n');
+fprintf('1: Play a game!\n');
+fprintf('2: No thanks.\n');
+playGame = input('');
+
+if (playGame ~= 1)
+    disp('Goodbye.');
+    return;
+end
+clc;
 
 %Show the game board with numbers for reference
 fprintf('This is the game board!\n');
@@ -54,9 +62,6 @@ fprintf('  | ');
 fprintf(gameBoard(9)); 
 fprintf(' \n');
 
-%Clear the numbers from the game board 
-gameBoard = [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '];
-
 %Determine who goes first
 fprintf('Would you like to go first?\n');
 fprintf('1: Yes\n');
@@ -74,13 +79,18 @@ if (firstMove ~= 1 && firstMove ~= 2)
         return;
     end
 end
-    
+clc;
+
 %***********Computer Turn 0 (if computer goes first)**********    
-if (firstMove == 2) 
+if (firstMove == 2)
+    %Clear the numbers from the game board
+    gameBoard = [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '];
+    
     %Impossible Computer Move
     gameBoard(7) = 'O';
     
-    displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+    disp('Computer''s Turn:');
+    displayGameBoard = ['     ', ...
         gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
         newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
         ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -94,10 +104,25 @@ end
 
 %**********Player Turn 1**********
 %Prompt user for move and take input
-playerMove = input(yourTurnMessage);
-playerMove = floor(playerMove);
 
+if (firstMove == 1)
+    %Display game board with numbers for locations
+    displayGameBoard = ['Game Board:', newline, '     ', ...
+        gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
+        newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
+        ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
+        '   ----|-----|-----', newline, '     ', gameBoard(7), ' |  ',...
+        gameBoard(8), '  | ', gameBoard(9), ' ', newline];
+    disp(displayGameBoard);
+
+    %Clear the numbers from the game board 
+    gameBoard = [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '];
+end
+
+playerMove = input(yourTurnMessage);
+    
 %Check that the player's move is a number 1-9
+playerMove = floor(playerMove);
 if (playerMove < 1) || (playerMove > 9)
     disp('Invalid Number: Pick a number between 1 and 9 or the game will end.');
     playerMove = input(yourTurnMessage);
@@ -127,7 +152,9 @@ end
 gameBoard(playerMove) = 'X';
 
 %Display updated game board
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+clc;
+disp('Player''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -158,7 +185,8 @@ elseif (firstMove == 2) %this is the computers second move
    end
 end
 
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+disp('Computer''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -204,7 +232,9 @@ end
 gameBoard(playerMove) = 'X';
 
 %Display updated game board
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+clc;
+disp('Player''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -342,7 +372,8 @@ elseif (gameBoard(8) == ' ')
     gameBoard(8) = 'O';
 end
 
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+disp('Computer''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -455,7 +486,9 @@ end
 gameBoard(playerMove) = 'X';
 
 %Display updated game board
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+clc;
+disp('Player''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -511,7 +544,7 @@ elseif (gameBoard(3) == gameBoard(6)) && (gameBoard(3) == gameBoard(9))
         disp('You Win!');
         return;
     elseif gameBoard(3) == 'O'
-        disp('You lost.');
+        disp('Why won''t you give up?');
         return;
     end
 elseif (gameBoard(1) == gameBoard(5)) && (gameBoard(1) == gameBoard(9))
@@ -664,7 +697,8 @@ elseif (gameBoard(8) == ' ')
     gameBoard(8) = 'O';
 end
 
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+disp('Computer''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -712,7 +746,7 @@ elseif (gameBoard(2) == gameBoard(5)) && (gameBoard(2) == gameBoard(8))
         disp('You Win!');
         return;
     elseif gameBoard(2) == 'O'
-        disp('You lost.');
+        disp('Resistance is futile.');
         return;
     end
 elseif (gameBoard(3) == gameBoard(6)) && (gameBoard(3) == gameBoard(9))
@@ -778,7 +812,9 @@ end
 gameBoard(playerMove) = 'X';
 
 %Display updated game board
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+clc;
+disp('Player''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -819,7 +855,7 @@ elseif (gameBoard(1) == gameBoard(4)) && (gameBoard(1) == gameBoard(7))
         disp('You Win!');
         return;
     elseif gameBoard(1) == 'O'
-        disp('You lost.');
+        disp('The computer doesn''t lose.');
         return;
     end  
 elseif (gameBoard(2) == gameBoard(5)) && (gameBoard(2) == gameBoard(8))
@@ -986,7 +1022,8 @@ elseif (gameBoard(8) == ' ')
     gameBoard(8) = 'O';
 end
 
-displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+disp('Computer''s Turn:');
+displayGameBoard = ['     ', ...
     gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
     newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
     ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -1018,7 +1055,7 @@ elseif (gameBoard(7) == gameBoard(8)) && (gameBoard(7) == gameBoard(9))
         disp('You Win!');
         return;
     elseif gameBoard(7) == 'O'
-        disp('You lost.');
+        disp('Give up, you can''t win.');
         return;
     end
 elseif (gameBoard(1) == gameBoard(4)) && (gameBoard(1) == gameBoard(7))
@@ -1101,7 +1138,9 @@ if (firstMove == 1)
     gameBoard(playerMove) = 'X';
 
     %Display updated game board
-    displayGameBoard = [newline, 'Game Board:', newline, '     ', ...
+    clc;
+    disp('Player''s Turn:');
+    displayGameBoard = ['     ', ...
         gameBoard(1), ' |  ', gameBoard(2), '  | ', gameBoard(3), ' ', ...
         newline, '   ----|-----|-----', newline, '     ', gameBoard(4),...
         ' |  ', gameBoard(5), '  | ', gameBoard(6), ' ', newline,...
@@ -1174,7 +1213,7 @@ if (firstMove == 1)
             disp('You Win!');
             return;
         elseif gameBoard(3) == 'O'
-            disp('You lost.');
+            disp('Winning is impossible.');
             return;
         end
     end
