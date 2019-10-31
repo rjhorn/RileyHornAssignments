@@ -173,7 +173,7 @@ if (firstMove == 1) %This means the human went first and this is the computers f
     if (gameBoard(5) == ' ')
         gameBoard(5) = 'O'; %The cpu will take the middle square if it goes second
     elseif (gameBoard(5) == 'X')
-        gameBoard(7) = '0'; %If the middle square was taken first, cpu will take the corner
+        gameBoard(7) = 'O'; %If the middle square was taken first, cpu will take the corner
     end
 elseif (firstMove == 2) %this is the computers second move
    if (gameBoard(1) == 'X')
