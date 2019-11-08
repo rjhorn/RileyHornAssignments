@@ -3,6 +3,7 @@ function [improvedSubjectIDs] = dayComparer(subjectID, dayA, dayB)
 %containing the days as inputs and returns matrix with the subjectIDs who 
 %had an increase from the first input day to the second input day.
 
+%Previous Implementation
 %q keeps track of how many subjects have been added to improvedSubjectIDs
 % q = 0;
 
@@ -16,6 +17,7 @@ function [improvedSubjectIDs] = dayComparer(subjectID, dayA, dayB)
 %     end
 % end
 
+%New Implementation using a logical array to compare dayA and dayB
 improvedSubjects = dayA < dayB;
 improvedSubjectIDs = subjectID(improvedSubjects);
 

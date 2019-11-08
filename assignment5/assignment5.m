@@ -28,12 +28,20 @@ day2toDay3 = dayComparer(subjectID, day2, day3);
 [normDay1mean, normDay2mean, normDay3mean] = ...
     isoNormalize(weight, day1, day2, day3);
 
-%All of the results are added to one array
-dataToExport = [maleIsoIndMeans; femaleIsoIndMeans; maleGroupIsoMean; ...
-    femaleGroupIsoMean; day1toDay2; day2toDay3; normDay1mean; ...
-    normDay2mean; normDay3mean];
+%Data is added to string array dataExport
+dataExport = strings(length(subjectID), 9);
+dataExport(1:length(maleIsoIndMeans),1) = maleIsoIndMeans;
+dataExport(1:length(femaleIsoIndMeans),2) = femaleIsoIndMeans;
+dataExport(1:length(maleGroupIsoMean),3) = maleGroupIsoMean;
+dataExport(1:length(femaleGroupIsoMean),4) = femaleGroupIsoMean;
+dataExport(1:length(day1toDay2),5) = day1toDay2;
+dataExport(1:length(day2toDay3),6) = day2toDay3;
+dataExport(1:length(normDay1mean),7) = normDay1mean;
+dataExport(1:length(normDay2mean),8) = normDay2mean;
+dataExport(1:length(normDay3mean),9) = normDay3mean;
 
 %Data is exported to file iso_results.csv
-writematrix(dataToExport, 'iso_results.csv');
+writematrix(dataExport, 'iso_results.csv');
+
 
 disp('Complete.');
